@@ -69,7 +69,7 @@ app.get("/",(req,res)=>{
 // app.get("/demouser",async (req,res)=>{
 //     let demoUser = new User({
 //         email:"abc@def.com",
-//         username:"Ritik2576"
+//         username:"Tanvisingh0829"
 //     })
 //     let registeredUser = await User.register(demoUser,"mypassword");
 //     res.send(registeredUser);
@@ -99,7 +99,7 @@ app.use("/",userRouter);
 
 // router.get("/testListing", async (req,res)=>{
 //     const tempListing = new Listing({
-//         title:"Ritik's Villa",
+//         title:"Tanvi's Villa",
 //         description:"Around the Mountains",
 //         price:9999,
 //         location:"Spiti Valley",

@@ -305,6 +305,6 @@ Potential future improvements include:
 
 ## Author
 
-**Ritik Kumar**
+**Tanvi Singh**
 
 Roamly was developed as a full-stack web development project to practice and demonstrate backend development, database integration, authentication, file uploads, cloud storage, server-side filtering, and frontend development.
