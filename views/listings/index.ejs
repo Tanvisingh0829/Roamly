@@ -1,0 +1,162 @@
+<% layout('layouts/boilerplate') -%>
+<style>
+    #filters{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .filter{
+        text-align: center;
+        margin-left: 2rem;
+        margin-top: 1.5rem;
+        opacity: 0.7;
+        text-decoration: none;
+        color: inherit;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid transparent;
+    }
+    .filter:hover{
+        opacity: 1;
+        cursor: pointer;
+    }
+    .active-filter {
+        opacity: 1;
+        border-bottom: 2px solid black;
+    }
+    .filter p{
+        font-size: 0.8rem;
+    }
+    .tax-info{
+        display: none;
+    }
+    .tax-toggle{
+        border: 1px solid black;
+        border-radius: 1rem;
+        height: 3rem;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+    }
+</style>
+<!-- <h2>All Listings</h2> -->
+<!-- <form action="/listings/new" method="GET">
+    <button>Create New Listing</button>
+</form> -->
+<% const currentCategory = typeof selectedCategory !== 'undefined' ? selectedCategory : 'All'; %>
+<% const currentSearch = typeof searchQuery !== 'undefined' && searchQuery ? `&search=${searchQuery}` : ''; %>
+<% const currentMin = typeof minPrice !== 'undefined' && minPrice ? `&minPrice=${minPrice}` : ''; %>
+<% const currentMax = typeof maxPrice !== 'undefined' && maxPrice ? `&maxPrice=${maxPrice}` : ''; %>
+<% const allParams = `${currentSearch}${currentMin}${currentMax}`; %>
+<% const baseSearchParams = allParams ? `?${allParams.substring(1)}` : ''; %>
+<div id="filters">
+    <a href="/listings<%= baseSearchParams %>" class="filter <%= currentCategory === 'All' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-border-all"></i></div>
+        <p>All Listings</p>
+    </a>
+    <a href="/listings?category=Trending<%= allParams %>" class="filter <%= currentCategory === 'Trending' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+    </a>
+    <a href="/listings?category=Rooms<%= allParams %>" class="filter <%= currentCategory === 'Rooms' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+    </a>
+    <a href="/listings?category=Iconic Cities<%= allParams %>" class="filter <%= currentCategory === 'Iconic Cities' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+        <p>Iconic Cities</p>
+    </a>
+    <a href="/listings?category=Mountains<%= allParams %>" class="filter <%= currentCategory === 'Mountains' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-mountain"></i></div>
+        <p>Mountains</p>
+    </a>
+    <a href="/listings?category=Castles<%= allParams %>" class="filter <%= currentCategory === 'Castles' ? 'active-filter' : '' %>">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+    </a>
+    <a href="/listings?category=Amazing Pools<%= allParams %>" class="filter <%= currentCategory === 'Amazing Pools' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Amazing Pools</p>
+    </a>
+    <a href="/listings?category=Camping<%= allParams %>" class="filter <%= currentCategory === 'Camping' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+    </a>
+    <a href="/listings?category=Arctic<%= allParams %>" class="filter <%= currentCategory === 'Arctic' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-igloo"></i></div>
+        <p>Arctic</p>
+    </a>
+    <a href="/listings?category=Adventure<%= allParams %>" class="filter <%= currentCategory === 'Adventure' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-person-hiking"></i></div>
+        <p>Adventure</p>
+    </a>
+    <a href="/listings?category=Beaches<%= allParams %>" class="filter <%= currentCategory === 'Beaches' ? 'active-filter' : '' %>">
+        <div><i class="fa-solid fa-umbrella-beach"></i></div>
+        <p>Beaches</p>
+    </a>
+    <div class="ms-auto d-flex flex-wrap align-items-center gap-3 me-3 mt-2 mb-2">
+        <% 
+            let clearPriceUrl = "/listings";
+            let clearParams = [];
+            if (currentCategory !== 'All') clearParams.push("category=" + currentCategory);
+            if (typeof searchQuery !== 'undefined' && searchQuery) clearParams.push("search=" + searchQuery);
+            if (clearParams.length > 0) clearPriceUrl += "?" + clearParams.join("&");
+        %>
+        <form action="/listings" method="GET" class="d-flex align-items-center mb-0">
+            <% if(typeof selectedCategory !== 'undefined' && selectedCategory !== 'All') { %>
+                <input type="hidden" name="category" value="<%= selectedCategory %>">
+            <% } %>
+            <% if(typeof searchQuery !== 'undefined' && searchQuery) { %>
+                <input type="hidden" name="search" value="<%= searchQuery %>">
+            <% } %>
+            <input type="number" name="minPrice" class="form-control me-1 px-2" placeholder="Min ₹" style="width: 80px; height: 3rem; border-radius: 1rem;" min="0" value="<%= typeof minPrice !== 'undefined' ? minPrice : '' %>">
+            <span class="me-1">-</span>
+            <input type="number" name="maxPrice" class="form-control me-2 px-2" placeholder="Max ₹" style="width: 80px; height: 3rem; border-radius: 1rem;" min="0" value="<%= typeof maxPrice !== 'undefined' ? maxPrice : '' %>">
+            <button type="submit" class="btn btn-outline-dark" style="height: 3rem; border-radius: 1rem;" title="Apply Filter"><i class="fa-solid fa-filter"></i></button>
+            <% if ((typeof minPrice !== 'undefined' && minPrice) || (typeof maxPrice !== 'undefined' && maxPrice)) { %>
+                <a href="<%= clearPriceUrl %>" class="btn btn-outline-danger ms-2 d-flex align-items-center justify-content-center" style="height: 3rem; width: 3rem; border-radius: 1rem;" title="Clear Price Filter"><i class="fa-solid fa-xmark"></i></a>
+            <% } %>
+        </form>
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                <label class="form-check-label" for="switchCheckDefault">Display Total after Taxes</label>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+        <% if (allListings.length === 0) { %>
+            <div class="col-12 mt-5 text-center">
+                <h3>No listings found.</h3>
+                <p>Try clearing your search filters or <a href="/listings">view all listings</a>.</p>
+            </div>
+        <% } %>
+        <% for(let listing of allListings){ %>
+            <a href="/listings/<%=listing.id%>" class="listing-link">
+                <div class="card col listing-card">
+                    <% let imgUrl = listing.images && listing.images.length > 0 ? listing.images[0].url : (listing.image && listing.image.url ? listing.image.url : "https://via.placeholder.com/800x400?text=No+Image"); %>
+                    <img src="<%= imgUrl %>" class="card-img-top" alt="listing-img" style="height: 20rem; object-fit: cover;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <b><p class="card-title"><%= listing.title%></p></b>
+                        <p class="card-text">
+                            &#8377;<%= listing.price.toLocaleString("en-IN")%> / night
+                            <i class="tax-info">&nbsp;+ 18% GST</i>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        <%  } %>
+    </div>
+<script>
+    let taxSwitch = document.getElementById('switchCheckDefault');
+    taxSwitch.addEventListener('click',()=>{
+        let taxInfo = document.getElementsByClassName('tax-info');
+        for(info of taxInfo){
+            if(info.style.display!='inline')info.style.display = 'inline';
+            else info.style.display = 'none';
+        }
+    })
+</script>
